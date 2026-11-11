@@ -1,4 +1,5 @@
 ![tests](https://github.com/sduarte09/chaotic-statiscal-downscaling/actions/workflows/tests.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24133815.svg)](https://doi.org/10.5281/zenodo.24133815)
 
 # CSD: Chaotic Statistical Downscaling
 
