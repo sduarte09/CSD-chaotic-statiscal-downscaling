@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the paper below (preferred) or the software itself."
 title: "CSD: Chaotic Statistical Downscaling"
 version: 0.1.0
+doi: "10.5281/zenodo.24133815"
 # Update date-released when you publish the release; add your ORCID below.
 date-released: 2026-11-11
 authors:
@@ -18,6 +19,7 @@ keywords:
   - hydroinformatics
 preferred-citation:
   type: conference-paper
+  doi: "10.29007/wkcx" 
   authors:
     - family-names: Duarte
       given-names: Freddy
