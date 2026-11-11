@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below (preferred) or the software itself."
+title: "CSD: Chaotic Statistical Downscaling"
+version: 0.1.0
+# Update date-released when you publish the release; add your ORCID below.
+date-released: 2026-11-12
+authors:
+  - family-names: Duarte
+    given-names: Santiago
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/sduarte09/chaotic-statiscal-downscaling"
+license: MIT
+keywords:
+  - downscaling
+  - precipitation
+  - chaos
+  - synchronization
+  - hydroinformatics
+preferred-citation:
+  type: conference-paper
+  authors:
+    - family-names: Duarte
+      given-names: Freddy
+    - family-names: Corzo
+      given-names: Gerald
+    - family-names: Santos
+      given-names: Germán
+    - family-names: Hernández
+      given-names: Oscar
+  title: "Chaotic Statistical Downscaling (CSD): Application and Comparison in the Bogotá River Basin"
+  collection-title: "HIC 2018. 13th International Conference on Hydroinformatics, EPiC Series in Engineering"
+  volume: 3
+  start: 626
+  end: 634
+  publisher:
+    name: EasyChair
+  year: 2018
+  month: 9
+  doi: "10.29007/wkcx"
+  url: "https://easychair.org/publications/paper/PKwW"
