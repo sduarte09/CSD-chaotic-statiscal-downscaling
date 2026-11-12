@@ -22,7 +22,7 @@ This repository holds the original MATLAB / Python 2 code (`legacy/`) and a Pyth
 | Per-station pipeline: calibration, validation, application (`csd.pipeline`) | tested on synthetic data |
 | Run notebook (`notebooks/run_csd.ipynb`) | runs end to end in demo mode |
 
-**What has not been verified.** There is no reference output from the MATLAB code in this repository, so the Python port is checked against synthetic chaotic series (identical series are recovered; independent series keep the station's mean and spread), not against the paper. The paper's RMSE of 73.37 has not been reproduced yet; that needs the Bogotá station data run through both implementations. `csd.chaos` needs `snlda` and `nolds` and is tested in CI, not in every environment.
+**What has not been verified.** There is no  output from the MATLAB code in this repository, so the Python port is checked against synthetic chaotic series (identical series are recovered; independent series keep the station's mean and spread), not against the paper. To replicate the RMSE of 73.37 of the paper that needs the Bogotá station data run through both implementations. `csd.chaos` needs `snlda` and `nolds` and is tested in CI, not in every environment.
 
 See `docs/LEGACY_NOTES.md` for what was found in the original code and which choices the package makes.
 
