@@ -8,38 +8,35 @@ def test_amplitude_ratio():
     assert sim.amplitude_ratio([2.0, 4.0], [1.0, 2.0]) == pytest.approx(2.0)
 
 
-def test_similarity_function_matches_the_original_expression():
+def test_similarity_function_matches_the_matlab_expression():
     rng = np.random.default_rng(0)
     station = rng.random(50)
     model = rng.random(50)
-    lag = 3
+    lag, amp = 3, 1.7
     n = len(station)
-    # Expression as written in the original script, with its extra (n - lag) factors
-    a = station[1 + lag : n + 1] - np.mean(station[1 + lag : n + 1])
-    b = station[: n - lag - 1] - np.mean(station[: n - lag - 1])
-    c = model[: n - lag - 1] - np.mean(model[: n - lag - 1])
+    # Calibration.m, with its (LEN - LAG) factors written out
+    a = station[lag:n] - np.mean(station[lag:n])
+    b = station[: n - lag] - np.mean(station[: n - lag])
+    c = model[: n - lag] - np.mean(model[: n - lag])
+    m = n - lag
     original = (
-        (np.mean((a - c) ** 2) / (n - lag))
-        / (np.mean(b**2) * np.mean(c**2) / (n - lag) ** 2) ** 0.5
+        (np.sum((a - amp * c) ** 2) / m) / ((np.sum(b**2) / m * (amp * np.sum(c**2)) / m) ** 0.5)
     ) ** 0.5
-    assert sim.similarity_function(station, model, lag) == pytest.approx(original)
+    assert sim.similarity_function(station, model, lag, amp) == pytest.approx(original)
 
 
 def test_similarity_is_zero_for_identical_series_at_lag_zero():
     x = np.random.default_rng(1).random(40)
-    # at lag 0 the compared windows are x[1:] and x[:-1], so use a constant-step ramp
-    ramp = np.arange(40.0)
-    assert sim.similarity_function(ramp, ramp, 0) == pytest.approx(0.0, abs=1e-12)
-    assert sim.similarity_function(x, x, 0) > 0  # random series shifted by one step differ
+    assert sim.similarity_function(x, x, 0) == pytest.approx(0.0, abs=1e-12)
+    assert sim.similarity_function(x, x, 1) > 0
 
 
 def test_best_lag_recovers_a_known_shift():
     t = np.arange(400)
     station = np.sin(2 * np.pi * t / 40)
     model = np.roll(station, -6)  # model[i] = station[i + 6]
-    # the comparison pairs station[j + 1 + lag] with model[j], so the match is at lag = 6 - 1
     lag, values = sim.best_lag(station, model, step=5, max_days=180)
-    assert lag == 5
+    assert lag == 6
     assert np.nanmin(values) == values[lag]
 
 
