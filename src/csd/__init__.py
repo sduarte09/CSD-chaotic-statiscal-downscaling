@@ -11,8 +11,21 @@ Tested building blocks of the CSD method (Duarte et al., 2018):
 
 The original MATLAB and Python 2 implementations are kept unchanged in ``legacy/``.
 """
-from . import accumulation, chaos, similarity
+import importlib
+
+from . import accumulation, calibration, embedding, similarity, synchronization
+
+_LAZY = {"chaos", "io", "pipeline"}  # chaos needs snlda, io needs a NetCDF reader
+
+
+def __getattr__(name):
+    if name in _LAZY:
+        return importlib.import_module(f".{name}", __name__)
+    raise AttributeError(f"module 'csd' has no attribute {name!r}")
 
 __version__ = "0.1.0"
 
-__all__ = ["accumulation", "chaos", "similarity", "__version__"]
+__all__ = [
+    "accumulation", "calibration", "chaos", "embedding", "io", "pipeline",
+    "similarity", "synchronization", "__version__",
+]

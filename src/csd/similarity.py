@@ -9,23 +9,25 @@ def amplitude_ratio(station_cal, model_cal):
     return float(np.mean(station_cal) / np.mean(model_cal))
 
 
-def similarity_function(station, model, lag):
+def similarity_function(station, model, lag, amplitude=1.0):
     """Generalized similarity function Sg between station and lagged model series.
 
     Smaller is more similar. Both series are cut and centred as in the original code,
-    so that station values from ``lag + 1`` onwards are compared with the model values
-    from the start.
+    so that station values from position ``lag`` onwards are compared with the model values
+    from the start (lag 0 compares the series as they are). ``amplitude`` rescales the centred model series; as in the MATLAB
+    expression it enters the normalisation once (not squared). With ``amplitude=1`` the
+    result is the plain similarity function.
     """
     station = np.asarray(station, dtype="float64")
     model = np.asarray(model, dtype="float64")
     n = station.size
-    shifted = station[1 + lag :]
-    base = station[: n - lag - 1]
-    other = model[: n - lag - 1]
+    shifted = station[lag:]
+    base = station[: n - lag]
+    other = model[: n - lag]
     if shifted.size == 0:
         return np.nan
-    diff = (shifted - shifted.mean()) - (other - other.mean())
-    scale = np.sqrt(np.mean((base - base.mean()) ** 2) * np.mean((other - other.mean()) ** 2))
+    diff = (shifted - shifted.mean()) - amplitude * (other - other.mean())
+    scale = np.sqrt(np.mean((base - base.mean()) ** 2) * amplitude * np.mean((other - other.mean()) ** 2))
     return float(np.sqrt(np.mean(diff**2) / scale))
 
 

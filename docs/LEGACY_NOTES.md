@@ -42,8 +42,19 @@ MATLAB version for the mutual false nearest neighbours (see below).
 - External dependencies not in the repository (see `legacy/README.md`). TISEAN is, to my
   knowledge, GPL-licensed; check before redistributing its executables.
 
+## Choices in the Python 3 port of Calibration, Validation and Synchronization
+
+- **Delay vectors** follow the MATLAB order: first column is the most recent value, row `r` is `[x[r+(D-1)τ], ..., x[r]]`.
+- **Time pairing.** Station and model vectors are paired by the time of their first coordinate plus the calibrated lag (`csd.embedding.paired_rows`), not by row number. Row-number pairing drifts when the two embeddings differ in dimension or delay.
+- **Similarity function.** The lag shifts the station series against the model series; the amplitude enters the normalisation once, as in `Calibration.m`. The earlier Python 2 version was off by one in the lag alignment.
+- **Application vectors** are built from the concatenated calibration + application model series, so no vector straddles a gap at the junction. The calibration amplitude is applied to the model vectors.
+- **Synchronization** solves the quadratic in the first coordinate over the FS grid (mean and standard deviation, ddof=1, of the second half of `ss`), picks the candidate with minimum distance, updates `ss` and `u`, and appends the new value. If no root is admissible, the nearest-neighbour value is used.
+- **Validation** compares the downscaled series with the *observed* accumulated series over the validation period. `Validation.m` compares against the calibration series, which looks like an error.
+- **Accumulation** uses complete blocks only (all-NaN blocks stay NaN). The application period starts the day after the last complete block of the calibration period.
+- **NetCDF.** `pr` is multiplied by 86400 (mm/day); model times are at 12:00 and are shifted to the calendar day; the 1e20 fill value is masked with a tolerance because it is stored as float32.
+- **Chaos is not reproducible pointwise.** For independent chaotic series only the distribution (mean, spread) is expected to be preserved; pointwise recovery happens only when station and model series are identical.
+
 ## Reproduction target
 
-The paper reports RMSE = 73.37 for the Bogotá case. Running the legacy code on the data
-in `data/` and checking that this value is reproduced is the natural regression test before
-porting the synchronization step.
+The paper reports RMSE = 73.37 for the Bogotá case. Running the legacy code and the Python port on the same Bogotá
+data and comparing the results is the missing regression test; it has not been done.

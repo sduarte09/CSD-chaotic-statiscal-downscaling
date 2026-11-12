@@ -14,12 +14,15 @@ keywords = ["downscaling", "precipitation", "chaos", "hydroinformatics", "synchr
 dependencies = [
     "numpy",
     "pandas",
+    "scipy",  # NetCDF reading/writing (classic format) and numerics
     # phase-space reconstruction and false-nearest-neighbour tools
     "snlda @ git+https://github.com/sduarte09/SNLDA.git",
 ]
 
 [project.optional-dependencies]
 test = ["pytest"]
+netcdf = ["netCDF4"]  # optional: NetCDF4/HDF5 files; classic NetCDF works with scipy alone
+notebook = ["jupyter", "matplotlib", "openpyxl"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
